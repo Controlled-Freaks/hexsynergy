@@ -5,13 +5,14 @@ import { EnergyConsumptionCard } from "@/components/EnergyConsumptionCard";
 import AwePointsCard from "@/components/AwePointsCard";
 import FloorMap from "@/components/FloorMap";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, ChartLine, Monitor, Settings, TrendingDown, TrendingUp } from "lucide-react";
+import { ArrowUpRight, ChartLine, Lightbulb, Monitor, Settings, TrendingDown, TrendingUp } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { DashboardCard } from "@/components/DashboardCard";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { ElevatorUsageCard } from "@/components/ElevatorUsageCard";
+import { SmartLightingCard } from "@/components/SmartLightingCard";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -130,6 +131,7 @@ const Dashboard = () => {
             <TabsTrigger value="carbon">Carbon Footprint</TabsTrigger>
             <TabsTrigger value="optimization">Optimizations</TabsTrigger>
             <TabsTrigger value="elevator">Elevator Usage</TabsTrigger>
+            <TabsTrigger value="lighting">Smart Lighting</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -197,7 +199,26 @@ const Dashboard = () => {
                 nextLevelPoints={1000}
                 rank={42}
                 totalUsers={156}
-                recentAchievements={recentAchievements}
+                recentAchievements={[
+                  {
+                    id: "a1",
+                    title: "Used Dark Mode for 3 days",
+                    points: 30,
+                    date: "2025-05-21",
+                  },
+                  {
+                    id: "a2",
+                    title: "Optimized seating arrangement",
+                    points: 50,
+                    date: "2025-05-20",
+                  },
+                  {
+                    id: "a3",
+                    title: "Reduced laptop idle time",
+                    points: 25,
+                    date: "2025-05-19",
+                  },
+                ]}
               />
             </div>
 
@@ -503,6 +524,11 @@ const Dashboard = () => {
           {/* New Elevator Usage Tab */}
           <TabsContent value="elevator" className="space-y-6">
             <ElevatorUsageCard />
+          </TabsContent>
+
+          {/* New Smart Lighting Tab */}
+          <TabsContent value="lighting" className="space-y-6">
+            <SmartLightingCard />
           </TabsContent>
         </Tabs>
       </main>
