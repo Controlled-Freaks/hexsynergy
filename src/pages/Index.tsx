@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import NavBar from "@/components/NavBar";
 import SustainabilityGlobe from "@/components/SustainabilityGlobe";
-import { ArrowRight, BarChart2, Leaf, Tree, TreeDeciduous, TreePalm, Globe, Laptop, ChevronDown } from "lucide-react";
+import { ArrowRight, BarChart2, Leaf, Trees, TreeDeciduous, TreePalm, Globe, Laptop, ChevronDown } from "lucide-react";
 import { DashboardCard } from "@/components/DashboardCard";
 import SustainabilityChart from "@/components/SustainabilityChart";
 import { useEffect } from "react";
@@ -97,7 +97,7 @@ const Index = () => {
     {
       title: "Urban Reforestation",
       description: "We've planted over 8,500 trees as part of our commitment to urban reforestation.",
-      icon: <Tree className="h-8 w-8" />
+      icon: <Trees className="h-8 w-8" />
     },
     {
       title: "Digital Optimization",
