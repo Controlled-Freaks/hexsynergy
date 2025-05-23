@@ -1,9 +1,8 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowUp, Stairs, TrendingDown, Zap } from "lucide-react";
+import { ArrowUp, Stars, TrendingDown, Zap } from "lucide-react";
 import { SustainabilityChart } from "@/components/SustainabilityChart";
 import { cn } from "@/lib/utils";
 import { Badge } from "./ui/badge";
@@ -115,7 +114,7 @@ export function ElevatorUsageCard({ className }: ElevatorUsageCardProps) {
     <Card className={cn("shadow-md", className)}>
       <CardHeader>
         <CardTitle className="text-xl flex items-center">
-          <Stairs className="h-5 w-5 mr-2 text-eco-green" />
+          <Stars className="h-5 w-5 mr-2 text-eco-green" />
           Elevator Usage Optimization
         </CardTitle>
         <p className="text-sm text-muted-foreground">
