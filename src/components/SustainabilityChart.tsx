@@ -24,7 +24,7 @@ interface SustainabilityChartProps {
   className?: string;
 }
 
-export default function SustainabilityChart({
+export function SustainabilityChart({
   type,
   data,
   title,
@@ -142,3 +142,6 @@ export default function SustainabilityChart({
     </Card>
   );
 }
+
+// Default export for backward compatibility
+export default SustainabilityChart;

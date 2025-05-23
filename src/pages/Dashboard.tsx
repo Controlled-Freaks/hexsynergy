@@ -11,6 +11,7 @@ import { DashboardCard } from "@/components/DashboardCard";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import { ElevatorUsageCard } from "@/components/ElevatorUsageCard";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -128,6 +129,7 @@ const Dashboard = () => {
             <TabsTrigger value="energy">Energy Usage</TabsTrigger>
             <TabsTrigger value="carbon">Carbon Footprint</TabsTrigger>
             <TabsTrigger value="optimization">Optimizations</TabsTrigger>
+            <TabsTrigger value="elevator">Elevator Usage</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -496,6 +498,11 @@ const Dashboard = () => {
                 </div>
               </DashboardCard>
             </div>
+          </TabsContent>
+
+          {/* New Elevator Usage Tab */}
+          <TabsContent value="elevator" className="space-y-6">
+            <ElevatorUsageCard />
           </TabsContent>
         </Tabs>
       </main>
