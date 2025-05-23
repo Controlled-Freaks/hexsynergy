@@ -1,4 +1,3 @@
-
 import NavBar from "@/components/NavBar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SustainabilityChart from "@/components/SustainabilityChart";
@@ -11,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { DashboardCard } from "@/components/DashboardCard";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 
 const Dashboard = () => {
   const { user } = useAuth();
