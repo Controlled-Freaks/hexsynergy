@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import NavBar from "@/components/NavBar";
 import { DashboardCard } from "@/components/DashboardCard";
-import { ArrowRight, Leaf, Globe, TreeDeciduous, Trees, Laptop, ChevronDown, LineChart, BarChart2, Wind, Zap, Recycle, Lightbulb } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { ArrowRight, Leaf, Globe, TreeDeciduous, Trees, Laptop, ChevronDown, LineChart, BarChart2, Wind, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
 import SustainabilityChart from "@/components/SustainabilityChart";
 import EnergySavingGlobe from "@/components/EnergySavingGlobe";
 import EcoImpactCounter from "@/components/EcoImpactCounter";
@@ -14,7 +14,6 @@ import { sustainabilityStatistics } from "@/data/sustainabilityData";
 const Index = () => {
   const [scrollY, setScrollY] = useState(0);
   const [animatedItems, setAnimatedItems] = useState<string[]>([]);
-  const heroRef = useRef<HTMLDivElement>(null);
   
   // Update scroll position
   useEffect(() => {
@@ -46,66 +45,6 @@ const Index = () => {
     
     return () => window.removeEventListener('scroll', animateOnScroll);
   }, [animatedItems]);
-
-  // Animation for floating elements in hero
-  useEffect(() => {
-    // Only run if hero element exists
-    if (!heroRef.current) return;
-    
-    // Create floating elements
-    const createFloatingElements = () => {
-      const heroEl = heroRef.current;
-      if (!heroEl) return;
-      
-      const iconElements = [Leaf, TreeDeciduous, Wind, Globe, Recycle, Lightbulb];
-      const iconColors = ['text-eco-green-dark/20', 'text-eco-green/20', 'text-eco-blue/20', 'text-eco-blue-dark/20', 'text-primary/20'];
-      const container = document.createElement('div');
-      container.className = 'absolute inset-0 overflow-hidden pointer-events-none z-0';
-      
-      // Remove any existing floating elements container
-      const existingContainer = heroEl.querySelector('.floating-elements-container');
-      if (existingContainer) {
-        existingContainer.remove();
-      }
-      
-      container.classList.add('floating-elements-container');
-      heroEl.appendChild(container);
-      
-      // Create 15 random elements
-      for (let i = 0; i < 15; i++) {
-        const iconIndex = Math.floor(Math.random() * iconElements.length);
-        const colorIndex = Math.floor(Math.random() * iconColors.length);
-        
-        const element = document.createElement('div');
-        element.className = `absolute ${iconColors[colorIndex]}`;
-        
-        // Random position
-        element.style.left = `${Math.random() * 100}%`;
-        element.style.top = `${Math.random() * 100}%`;
-        
-        // Random size
-        const size = 20 + Math.random() * 40;
-        element.style.width = `${size}px`;
-        element.style.height = `${size}px`;
-        
-        // Random animation delay and duration
-        const animDuration = 15 + Math.random() * 20;
-        element.style.animation = `float ${animDuration}s infinite ease-in-out ${Math.random() * 10}s`;
-        
-        // Create SVG icon
-        const IconComponent = iconElements[iconIndex];
-        element.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon">${IconComponent({}).props.children}</svg>`;
-        
-        container.appendChild(element);
-      }
-    };
-    
-    createFloatingElements();
-    
-    // Re-create on window resize
-    window.addEventListener('resize', createFloatingElements);
-    return () => window.removeEventListener('resize', createFloatingElements);
-  }, [heroRef]);
 
   // Current year stats for display
   const sustainabilityStats = [
@@ -167,71 +106,28 @@ const Index = () => {
     }
   ];
 
-  // New function to get unique building data
-  const getBuildingData = (buildingId: string) => {
-    return sustainabilityStatistics.buildings.find(b => b.id === buildingId);
-  };
-
-  const getIconForInitiative = (iconName: string) => {
-    switch(iconName) {
-      case 'Leaf': return <Leaf className="h-6 w-6 text-primary" />;
-      case 'Globe': return <Globe className="h-6 w-6 text-primary" />;
-      case 'TreeDeciduous': return <TreeDeciduous className="h-6 w-6 text-primary" />;
-      case 'Wind': return <Wind className="h-6 w-6 text-primary" />;
-      case 'Recycle': return <Recycle className="h-6 w-6 text-primary" />;
-      case 'Lightbulb': return <Lightbulb className="h-6 w-6 text-primary" />;
-      default: return <Leaf className="h-6 w-6 text-primary" />;
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background to-muted/30">
       <NavBar />
       
-      {/* Enhanced Hero Section with Parallax Effect */}
-      <section 
-        ref={heroRef}
-        className="w-full py-12 md:py-24 lg:py-32 xl:py-36 overflow-hidden relative h-screen flex items-center"
-      >
-        {/* Parallax Background */}
+      {/* Hero Section with Parallax Effect */}
+      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-36 overflow-hidden relative h-screen flex items-center">
         <div
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1506744038136-46273834b3fb')] bg-cover bg-center"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1506744038136-46273834b3fb')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
             transform: `translateY(${scrollY * 0.5}px)`,
-            opacity: 0.15,
+            opacity: 0.2,
           }}
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
         
-        {/* Gradient Overlay */}
-        <div 
-          className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"
-          style={{
-            background: 'radial-gradient(circle at center, transparent 0%, var(--background) 80%)',
-          }}
-        />
-        
-        {/* Content Container */}
         <div className="container px-4 md:px-6 relative z-20">
           <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
             <div className="flex flex-col justify-center space-y-6">
               <div className="space-y-4">
-                <div className="inline-flex items-center bg-primary/10 backdrop-blur-md px-3 py-1 rounded-full text-primary text-sm font-medium mb-2 animate-fade-in">
-                  <Leaf className="h-4 w-4 mr-1" />
-                  Sustainable Future Initiative
-                </div>
-                
                 <h1 className="text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl/none animate-fade-in">
-                  <span className="text-eco-green-dark relative inline-block">
-                    HexSynergy
-                    <span className="absolute -bottom-1 left-0 w-full h-1 bg-primary/50 rounded-full"></span>
-                  </span>
-                  <span className="block text-4xl md:text-5xl mt-2 text-primary/80 bg-gradient-to-r from-eco-green-dark to-eco-blue bg-clip-text text-transparent">
-                    Growth, Greenery, and Sustainability
-                  </span>
+                  <span className="text-eco-green-dark">HexSynergy</span>
+                  <span className="block text-4xl md:text-5xl mt-2 text-primary/80">Growth, Greenery, and Sustainability</span>
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl animate-fade-in">
                   Enhancing digital solutions through
@@ -243,26 +139,21 @@ const Index = () => {
               </div>
               <div className="flex flex-col sm:flex-row gap-3 animate-fade-in">
                 <Link to="/dashboard">
-                  <Button className="px-8 group bg-gradient-to-r from-eco-green-dark to-primary hover:opacity-90 transition-all duration-300">
+                  <Button className="px-8 group transition-all duration-300">
                     View Dashboard 
                     <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
                 <Link to="/login">
-                  <Button variant="outline" className="group backdrop-blur-sm border-primary/30 hover:bg-primary/10">
+                  <Button variant="outline" className="group">
                     Login to Your Account
                     <ArrowRight className="ml-2 h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                   </Button>
                 </Link>
               </div>
             </div>
-            <div className="h-[400px] lg:h-auto flex items-center justify-center animate-fade-in relative">
-              {/* Glowing background effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-eco-blue/10 rounded-full filter blur-3xl opacity-50 animate-pulse"></div>
-              
-              <div className="relative z-10">
-                <EnergySavingGlobe />
-              </div>
+            <div className="h-[400px] lg:h-auto flex items-center justify-center animate-fade-in">
+              <EnergySavingGlobe />
             </div>
           </div>
         </div>
@@ -270,11 +161,10 @@ const Index = () => {
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
           <Button 
             variant="ghost" 
-            size="icon"
-            className="bg-primary/10 backdrop-blur-sm hover:bg-primary/20 rounded-full"
+            size="icon" 
             onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            <ChevronDown className="h-6 w-6 text-primary" />
+            <ChevronDown className="h-6 w-6" />
           </Button>
         </div>
       </section>
@@ -300,7 +190,7 @@ const Index = () => {
               <DashboardCard 
                 key={stat.id} 
                 variant="glassmorphic" 
-                className="text-center hover:shadow-lg transition-all animate-on-scroll transform-gpu hover:-translate-y-1" 
+                className="text-center hover:shadow-lg transition-all animate-on-scroll" 
                 id={`stat-card-${index}`}
               >
                 <div className="space-y-4 flex flex-col items-center">
@@ -507,26 +397,23 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {sustainabilityStatistics.initiatives.map((initiative, index) => (
               <div 
-                key={initiative.id} 
+                key={index} 
                 className={`animate-on-scroll ${index % 2 === 0 ? 'transform-gpu translate-y-0 hover:-translate-y-2' : 'transform-gpu translate-y-4 hover:-translate-y-2'} transition-all duration-300`}
                 id={`initiative-${index}`}
               >
-                <DashboardCard className="h-full hover:shadow-lg hover:shadow-primary/10 transition-all">
+                <DashboardCard className="h-full">
                   <div className="flex flex-col h-full">
                     <div className="rounded-full bg-primary/10 p-3 w-fit mb-4">
-                      {getIconForInitiative(initiative.icon)}
+                      {initiative.icon === 'Leaf' && <Leaf className="h-6 w-6 text-primary" />}
+                      {initiative.icon === 'Globe' && <Globe className="h-6 w-6 text-primary" />}
+                      {initiative.icon === 'TreeDeciduous' && <TreeDeciduous className="h-6 w-6 text-primary" />}
+                      {initiative.icon === 'Wind' && <Wind className="h-6 w-6 text-primary" />}
                     </div>
                     <h3 className="text-xl font-bold mb-2">{initiative.title}</h3>
                     <p className="text-muted-foreground mb-4 flex-grow">{initiative.description}</p>
-                    
-                    <div className="flex justify-between text-sm mb-2">
-                      <span>{initiative.timeline.start}</span>
-                      <span>{initiative.timeline.estimatedCompletion}</span>
-                    </div>
-                    
                     <div className="mt-auto">
                       <div className="flex justify-between text-sm mb-1">
                         <span>Progress</span>
@@ -549,70 +436,28 @@ const Index = () => {
         <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-background to-transparent z-10"></div>
       </section>
       
-      {/* Recent Achievements Section - New */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-muted/20 to-background relative overflow-hidden">
-        <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12 animate-on-scroll" id="achievements-title">
-            <div className="space-y-2">
-              <div className="inline-block p-2 bg-primary/10 rounded-full mb-2">
-                <LineChart className="h-6 w-6 text-primary" />
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Recent <span className="text-primary">Achievements</span>
-              </h2>
-              <p className="max-w-[900px] text-muted-foreground md:text-xl">
-                Our latest milestones in sustainability
-              </p>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {sustainabilityStatistics.recentAchievements.map((achievement, index) => (
-              <div className="animate-on-scroll" id={`achievement-${index}`} key={index}>
-                <DashboardCard className="h-full border-0 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 transform-gpu">
-                  <div className="p-6 flex flex-col h-full">
-                    <div className="flex justify-between items-start mb-4">
-                      <h3 className="text-xl font-bold">{achievement.title}</h3>
-                      <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">{achievement.date}</span>
-                    </div>
-                    <p className="text-muted-foreground mb-4 flex-grow">{achievement.description}</p>
-                    <div className="mt-auto text-center">
-                      <div className="text-3xl font-bold text-primary">{achievement.impact.toLocaleString()}</div>
-                      <div className="text-sm text-muted-foreground">{achievement.unit}</div>
-                    </div>
-                  </div>
-                </DashboardCard>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      
-      {/* CTA Section - Enhanced with particles */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-eco-green-dark to-primary text-primary-foreground relative overflow-hidden">
+      {/* CTA Section */}
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-primary text-primary-foreground relative overflow-hidden">
         {/* Animated particles */}
         <div className="absolute inset-0">
-          {Array.from({ length: 30 }).map((_, i) => (
+          {Array.from({ length: 20 }).map((_, i) => (
             <div 
               key={i}
               className="absolute rounded-full bg-primary-foreground/10"
               style={{
-                width: Math.random() * 15 + 5 + 'px',
-                height: Math.random() * 15 + 5 + 'px',
+                width: Math.random() * 10 + 5 + 'px',
+                height: Math.random() * 10 + 5 + 'px',
                 left: Math.random() * 100 + '%',
                 top: Math.random() * 100 + '%',
-                animation: `float ${Math.random() * 15 + 10}s infinite ease-in-out ${Math.random() * 5}s`
+                animation: `float ${Math.random() * 10 + 10}s infinite ease-in-out`
               }}
             />
           ))}
         </div>
         
         <div className="container px-4 md:px-6 relative z-10">
-          <div className="flex flex-col items-center justify-center space-y-6 text-center animate-on-scroll" id="cta-section">
-            <div className="space-y-4 max-w-3xl">
-              <div className="mx-auto w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-6">
-                <Globe className="h-8 w-8 text-white" />
-              </div>
+          <div className="flex flex-col items-center justify-center space-y-6 text-center animate-on-scroll">
+            <div className="space-y-2 max-w-3xl">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                 Join HexSynergy Today
               </h2>
@@ -620,7 +465,7 @@ const Index = () => {
                 Be part of our mission to create a sustainable digital future. Track your energy usage, reduce emissions, and earn rewards.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 mt-6">
+            <div className="flex flex-col sm:flex-row gap-3">
               <Link to="/dashboard">
                 <Button variant="secondary" className="px-8 hover:bg-white hover:text-primary transition-colors">
                   Explore Dashboard
@@ -637,23 +482,17 @@ const Index = () => {
       </section>
       
       {/* Footer */}
-      <footer className="w-full py-8 bg-background border-t">
+      <footer className="w-full py-6 bg-background border-t">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="flex items-center space-x-2">
-              <div className="bg-primary text-primary-foreground w-10 h-10 rounded-md flex items-center justify-center font-bold">Hs</div>
+              <div className="bg-primary text-primary-foreground w-8 h-8 rounded-md flex items-center justify-center font-bold">Hs</div>
               <span className="font-bold text-xl">HexSynergy</span>
             </div>
             <p className="text-muted-foreground">
-              Growing together for a sustainable future
+              Code for a Greener Future Hackathon Project
             </p>
-            <div className="flex space-x-4">
-              <Globe className="h-5 w-5 text-muted-foreground hover:text-primary cursor-pointer transition-colors" />
-              <TreeDeciduous className="h-5 w-5 text-muted-foreground hover:text-primary cursor-pointer transition-colors" />
-              <Leaf className="h-5 w-5 text-muted-foreground hover:text-primary cursor-pointer transition-colors" />
-              <Wind className="h-5 w-5 text-muted-foreground hover:text-primary cursor-pointer transition-colors" />
-            </div>
-            <p className="text-xs text-muted-foreground mt-6">
+            <p className="text-xs text-muted-foreground">
               &copy; 2025 HexSynergy by Hexaware. All rights reserved.
             </p>
           </div>
