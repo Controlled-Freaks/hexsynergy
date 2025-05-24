@@ -1,7 +1,9 @@
 
 import { useEffect, useState } from 'react';
+import { useDataContext } from '@/contexts/DataContext';
 
 export default function EcoImpactCounter() {
+  const { realTimeMetrics } = useDataContext();
   const [metrics, setMetrics] = useState({
     energy: 0,
     trees: 0,
@@ -10,14 +12,14 @@ export default function EcoImpactCounter() {
   });
 
   const targets = {
-    energy: 6350000, // kWh of renewable energy
-    trees: 8500,     // Trees planted
-    carbon: 2800,    // Tons of CO2 reduction
-    water: 42000000  // Liters of water saved
+    energy: realTimeMetrics.totalEnergyConsumption,
+    trees: realTimeMetrics.treesPlanted,
+    carbon: realTimeMetrics.co2Reduction,
+    water: realTimeMetrics.waterSaved
   };
 
   useEffect(() => {
-    // Animate counters on component mount
+    // Animate counters when targets change
     const duration = 2000; // 2 seconds for animation
     const framesPerSecond = 60;
     const totalFrames = duration / 1000 * framesPerSecond;
@@ -41,7 +43,7 @@ export default function EcoImpactCounter() {
     }, 1000 / framesPerSecond);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [targets.energy, targets.trees, targets.carbon, targets.water]);
 
   // Easing function for smoother animation
   const easeOutCubic = (x: number): number => {

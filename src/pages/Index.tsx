@@ -8,10 +8,14 @@ import { useEffect, useState } from "react";
 import SustainabilityChart from "@/components/SustainabilityChart";
 import EnergySavingGlobe from "@/components/EnergySavingGlobe";
 import EcoImpactCounter from "@/components/EcoImpactCounter";
+import LiveMetricsPanel from "@/components/LiveMetricsPanel";
+import LiveNotifications from "@/components/LiveNotifications";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { sustainabilityStatistics } from "@/data/sustainabilityData";
+import { useDataContext } from "@/contexts/DataContext";
 
 const Index = () => {
+  const { realTimeMetrics, sustainabilityStats: contextSustainabilityStats } = useDataContext();
   const [scrollY, setScrollY] = useState(0);
   const [animatedItems, setAnimatedItems] = useState<string[]>([]);
   
@@ -46,13 +50,13 @@ const Index = () => {
     return () => window.removeEventListener('scroll', animateOnScroll);
   }, [animatedItems]);
 
-  // Current year stats for display
-  const sustainabilityStats = [
-    { id: 1, stat: "2,800", text: "tons of CO₂ reduction through renewable energy", icon: <Leaf className="h-10 w-10 text-eco-green" /> },
-    { id: 2, stat: "96%", text: "of Chennai campus energy from green power", icon: <BarChart2 className="h-10 w-10 text-eco-blue" /> },
+  // Current year stats for display using real-time data
+  const sustainabilityStatsDisplay = [
+    { id: 1, stat: realTimeMetrics.co2Reduction.toLocaleString(), text: "tons of CO₂ reduction through renewable energy", icon: <Leaf className="h-10 w-10 text-eco-green" /> },
+    { id: 2, stat: `${Math.round(realTimeMetrics.renewableEnergyPercentage)}%`, text: "of Chennai campus energy from green power", icon: <BarChart2 className="h-10 w-10 text-eco-blue" /> },
     { id: 3, stat: "2,250", text: "kg of dry recyclable waste from Chennai campus", icon: <TreeDeciduous className="h-10 w-10 text-eco-green-dark" /> },
-    { id: 4, stat: "6,350,000", text: "kWh of wind energy used", icon: <Globe className="h-10 w-10 text-eco-blue" /> },
-    { id: 5, stat: "8,500+", text: "trees planted as part of urban re-forestation", icon: <Trees className="h-10 w-10 text-eco-green" /> },
+    { id: 4, stat: realTimeMetrics.totalEnergyConsumption.toLocaleString(), text: "kWh of renewable energy used", icon: <Globe className="h-10 w-10 text-eco-blue" /> },
+    { id: 5, stat: `${realTimeMetrics.treesPlanted.toLocaleString()}+`, text: "trees planted as part of urban re-forestation", icon: <Trees className="h-10 w-10 text-eco-green" /> },
     { id: 6, stat: "2,450", text: "kW solar capacity at Hexaware offices", icon: <Laptop className="h-10 w-10 text-eco-blue-dark" /> },
   ];
 
@@ -109,31 +113,84 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background to-muted/30">
       <NavBar />
+      <LiveNotifications />
       
-      {/* Hero Section with Parallax Effect */}
-      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-36 overflow-hidden relative h-screen flex items-center">
+      {/* Enhanced Hero Section with Multiple Backgrounds */}
+      <section className="w-full py-8 md:py-16 lg:py-20 xl:py-24 overflow-hidden relative min-h-screen flex items-center">
+        {/* Multiple layered backgrounds for depth */}
         <div
-          className="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1506744038136-46273834b3fb')] bg-cover bg-center"
+          className="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071')] bg-cover bg-center"
           style={{
-            transform: `translateY(${scrollY * 0.5}px)`,
-            opacity: 0.2,
+            transform: `translateY(${scrollY * 0.3}px)`,
+            opacity: 0.15,
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
+        <div
+          className="absolute inset-0 z-1 bg-[url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=2070')] bg-cover bg-center"
+          style={{
+            transform: `translateY(${scrollY * 0.5}px)`,
+            opacity: 0.1,
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-eco-green/20 via-transparent to-eco-blue/20 z-5"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background/90 z-10"></div>
+        
+        {/* Floating animated elements */}
+        <div className="absolute inset-0 z-5">
+          <div className="absolute top-20 left-10 animate-pulse">
+            <div className="w-3 h-3 bg-eco-green rounded-full opacity-60"></div>
+          </div>
+          <div className="absolute top-40 right-20 animate-pulse delay-1000">
+            <div className="w-2 h-2 bg-eco-blue rounded-full opacity-40"></div>
+          </div>
+          <div className="absolute bottom-40 left-20 animate-pulse delay-2000">
+            <div className="w-4 h-4 bg-eco-yellow rounded-full opacity-50"></div>
+          </div>
+          <div className="absolute top-60 left-1/3 animate-pulse delay-500">
+            <Leaf className="h-6 w-6 text-eco-green/30" />
+          </div>
+          <div className="absolute bottom-60 right-1/3 animate-pulse delay-1500">
+            <Wind className="h-8 w-8 text-eco-blue/20" />
+          </div>
+        </div>
         
         <div className="container px-4 md:px-6 relative z-20">
           <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
             <div className="flex flex-col justify-center space-y-6">
-              <div className="space-y-4">
+              <div className="space-y-6">
+                {/* Enhanced Badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-eco-green/10 border border-eco-green/20 rounded-full text-sm font-medium text-eco-green-dark animate-fade-in">
+                  <div className="w-2 h-2 bg-eco-green rounded-full animate-pulse"></div>
+                  Live Energy Monitoring • Real-time Impact Tracking
+                </div>
+                
                 <h1 className="text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl/none animate-fade-in">
-                  <span className="text-eco-green-dark">HexSynergy</span>
-                  <span className="block text-4xl md:text-5xl mt-2 text-primary/80">Growth, Greenery, and Sustainability</span>
+                  <span className="bg-gradient-to-r from-eco-green-dark to-eco-blue bg-clip-text text-transparent">HexSynergy</span>
+                  <span className="block text-4xl md:text-5xl mt-3 bg-gradient-to-r from-primary via-eco-green to-eco-blue bg-clip-text text-transparent">
+                    Powering Tomorrow's Green Digital Workspace
+                  </span>
                 </h1>
-                <p className="max-w-[600px] text-muted-foreground md:text-xl animate-fade-in">
-                  Enhancing digital solutions through
-                  innovation and strategic leadership for
-                  a sustainable future
+                
+                <p className="max-w-[650px] text-muted-foreground md:text-xl leading-relaxed animate-fade-in">
+                  Transform your workplace into a sustainability powerhouse. Track energy consumption, 
+                  reduce carbon footprint, and earn rewards while building a greener future for Hexaware.
                 </p>
+                
+                {/* Key Features */}
+                <div className="flex flex-wrap gap-4 animate-fade-in">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="w-2 h-2 bg-eco-green rounded-full"></div>
+                    Real-time Energy Tracking
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="w-2 h-2 bg-eco-blue rounded-full"></div>
+                    Smart Building Analytics
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <div className="w-2 h-2 bg-eco-yellow rounded-full"></div>
+                    Gamified Sustainability
+                  </div>
+                </div>
                 
                 <EcoImpactCounter />
               </div>
@@ -170,9 +227,9 @@ const Index = () => {
       </section>
       
       {/* Stats Section */}
-      <section id="stats" className="w-full py-12 md:py-24 lg:py-32">
+      <section id="stats" className="w-full py-8 md:py-12 lg:py-16">
         <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12 animate-on-scroll" id="stats-title">
+          <div className="flex flex-col items-center justify-center space-y-3 text-center mb-8 animate-on-scroll" id="stats-title">
             <div className="space-y-2">
               <div className="inline-block p-2 bg-primary/10 rounded-full mb-2">
                 <LineChart className="h-6 w-6 text-primary" />
@@ -186,7 +243,7 @@ const Index = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sustainabilityStats.map((stat, index) => (
+            {sustainabilityStatsDisplay.map((stat, index) => (
               <DashboardCard 
                 key={stat.id} 
                 variant="glassmorphic" 
@@ -207,9 +264,9 @@ const Index = () => {
       </section>
       
       {/* Interactive Success Stories */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/30">
+      <section className="w-full py-8 md:py-12 lg:py-16 bg-muted/30">
         <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12 animate-on-scroll" id="stories-title">
+          <div className="flex flex-col items-center justify-center space-y-3 text-center mb-8 animate-on-scroll" id="stories-title">
             <div className="space-y-2">
               <div className="inline-block p-2 bg-primary/10 rounded-full mb-2">
                 <Globe className="h-6 w-6 text-primary" />
@@ -267,10 +324,17 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Live Building Stats */}
-      <section className="w-full py-12 md:py-24 lg:py-32">
+      {/* Live Metrics Dashboard */}
+      <section className="w-full py-8 md:py-12 lg:py-16 bg-gradient-to-br from-background via-muted/20 to-background">
         <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12 animate-on-scroll" id="building-title">
+          <LiveMetricsPanel />
+        </div>
+      </section>
+
+      {/* Live Building Stats */}
+      <section className="w-full py-8 md:py-12 lg:py-16">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-3 text-center mb-8 animate-on-scroll" id="building-title">
             <div className="space-y-2">
               <div className="inline-block p-2 bg-primary/10 rounded-full mb-2">
                 <Zap className="h-6 w-6 text-primary" />
@@ -368,7 +432,7 @@ const Index = () => {
       </section>
       
       {/* Animated Initiatives Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-primary/5 relative overflow-hidden">
+      <section className="w-full py-8 md:py-12 lg:py-16 bg-primary/5 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-background to-transparent z-10"></div>
         
         {/* Animated background elements */}
@@ -383,7 +447,7 @@ const Index = () => {
         </div>
         
         <div className="container px-4 md:px-6 relative z-10">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12 animate-on-scroll" id="initiatives-title">
+          <div className="flex flex-col items-center justify-center space-y-3 text-center mb-8 animate-on-scroll" id="initiatives-title">
             <div className="space-y-2">
               <div className="inline-block p-2 bg-primary/10 rounded-full mb-2">
                 <Trees className="h-6 w-6 text-primary" />
@@ -437,7 +501,7 @@ const Index = () => {
       </section>
       
       {/* CTA Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-primary text-primary-foreground relative overflow-hidden">
+      <section className="w-full py-8 md:py-12 lg:py-16 bg-primary text-primary-foreground relative overflow-hidden">
         {/* Animated particles */}
         <div className="absolute inset-0">
           {Array.from({ length: 20 }).map((_, i) => (
