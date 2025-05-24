@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -44,6 +45,12 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 150 16% 90%;
     --sidebar-ring: 142 76% 36%;
+
+    --eco-green: 122 39% 49%;
+    --eco-green-dark: 125 56% 34%;
+    --eco-blue: 210 79% 46%;
+    --eco-blue-dark: 210 79% 36%;
+    --eco-yellow: 45 100% 51%;
   }
 
   .dark {
@@ -83,6 +90,12 @@
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 145 30% 20%;
     --sidebar-ring: 142 76% 36%;
+
+    --eco-green: 122 39% 49%;
+    --eco-green-dark: 125 56% 34%;
+    --eco-blue: 210 79% 46%;
+    --eco-blue-dark: 210 79% 36%;
+    --eco-yellow: 45 100% 51%;
   }
 }
 
@@ -193,4 +206,82 @@ html, body {
 .animate-fade-in {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* New animations for the enhanced home page */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.leaf-animation {
+  top: 10%;
+  left: 10%;
+  animation: float 15s infinite ease-in-out;
+}
+
+.wind-animation {
+  top: 70%;
+  left: 80%;
+  animation: float 12s infinite ease-in-out;
+}
+
+.tree-animation {
+  top: 30%;
+  left: 70%;
+  animation: float 18s infinite ease-in-out;
+}
+
+/* Text underline animation */
+.animated-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.animated-underline::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: hsl(var(--primary));
+  transform-origin: bottom right;
+  transition: transform 0.4s ease-out;
+}
+
+.animated-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Carousel Animations */
+.carousel-item {
+  transition: transform 0.5s ease-out;
+}
+
+.carousel-item:hover {
+  transform: scale(1.02);
+}
+
+/* Eco Impact Counter Animation */
+@keyframes countUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Parallax effect classes */
+.parallax {
+  transition: transform 0.1s cubic-bezier(0,0,0.2,1);
 }
