@@ -317,46 +317,6 @@ npm run preview
 
 ---
 
-## 🤝 Contributing
-
-### **Development Workflow**
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### **Code Standards**
-- Follow TypeScript best practices
-- Maintain test coverage above 80%
-- Use semantic commit messages
-- Update documentation for new features
-
----
-
-## 📞 Support & Contact
-
-### **Development Team: EcoFuelers**
-- **Project Lead**: [Team Lead Name]
-- **Frontend Developers**: React/TypeScript specialists
-- **UI/UX Designers**: Sustainability-focused design team
-- **Data Scientists**: Environmental impact analysts
-
-### **Technical Support**
-- **Documentation**: Comprehensive guides and API references
-- **Issue Tracking**: GitHub Issues for bug reports and feature requests
-- **Community**: Developer community for collaboration and support
-
----
-
-## 📄 License
-
-This project is proprietary software developed for **Hexaware Technologies**. All rights reserved.
-
-**Copyright © 2025 HexSynergy by Hexaware Technologies. All rights reserved.**
-
----
-
 ## 🌟 Acknowledgments
 
 - **Hexaware Technologies** - For supporting sustainable innovation
