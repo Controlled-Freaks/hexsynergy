@@ -44,6 +44,25 @@ export const useDataContext = () => {
   return context;
 };
 
+// Safe data access helpers
+export const safeGetMetricValue = (value: number | undefined | null, fallback: number = 0): string => {
+  try {
+    return (value ?? fallback).toLocaleString();
+  } catch (error) {
+    console.warn('Error formatting metric value:', error);
+    return fallback.toString();
+  }
+};
+
+export const safeGetPercentage = (value: number | undefined | null, fallback: number = 0): string => {
+  try {
+    return `${Math.round(value ?? fallback)}%`;
+  } catch (error) {
+    console.warn('Error formatting percentage:', error);
+    return `${fallback}%`;
+  }
+};
+
 interface DataProviderProps {
   children: ReactNode;
 }

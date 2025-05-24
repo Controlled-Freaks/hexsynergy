@@ -12,7 +12,7 @@ import LiveMetricsPanel from "@/components/LiveMetricsPanel";
 import LiveNotifications from "@/components/LiveNotifications";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { sustainabilityStatistics } from "@/data/sustainabilityData";
-import { useDataContext } from "@/contexts/DataContext";
+import { useDataContext, safeGetMetricValue, safeGetPercentage } from "@/contexts/DataContext";
 
 const Index = () => {
   const { realTimeMetrics, sustainabilityStats: contextSustainabilityStats } = useDataContext();
@@ -50,13 +50,13 @@ const Index = () => {
     return () => window.removeEventListener('scroll', animateOnScroll);
   }, [animatedItems]);
 
-  // Current year stats for display using real-time data
+  // Current year stats for display using real-time data with safe access
   const sustainabilityStatsDisplay = [
-    { id: 1, stat: realTimeMetrics.co2Reduction.toLocaleString(), text: "tons of CO₂ reduction through renewable energy", icon: <Leaf className="h-10 w-10 text-eco-green" /> },
-    { id: 2, stat: `${Math.round(realTimeMetrics.renewableEnergyPercentage)}%`, text: "of Chennai campus energy from green power", icon: <BarChart2 className="h-10 w-10 text-eco-blue" /> },
+    { id: 1, stat: safeGetMetricValue(realTimeMetrics?.co2Reduction), text: "tons of CO₂ reduction through renewable energy", icon: <Leaf className="h-10 w-10 text-eco-green" /> },
+    { id: 2, stat: safeGetPercentage(realTimeMetrics?.renewableEnergyPercentage), text: "of Chennai campus energy from green power", icon: <BarChart2 className="h-10 w-10 text-eco-blue" /> },
     { id: 3, stat: "2,250", text: "kg of dry recyclable waste from Chennai campus", icon: <TreeDeciduous className="h-10 w-10 text-eco-green-dark" /> },
-    { id: 4, stat: realTimeMetrics.totalEnergyConsumption.toLocaleString(), text: "kWh of renewable energy used", icon: <Globe className="h-10 w-10 text-eco-blue" /> },
-    { id: 5, stat: `${realTimeMetrics.treesPlanted.toLocaleString()}+`, text: "trees planted as part of urban re-forestation", icon: <Trees className="h-10 w-10 text-eco-green" /> },
+    { id: 4, stat: safeGetMetricValue(realTimeMetrics?.totalEnergyConsumption), text: "kWh of renewable energy used", icon: <Globe className="h-10 w-10 text-eco-blue" /> },
+    { id: 5, stat: `${safeGetMetricValue(realTimeMetrics?.treesPlanted)}+`, text: "trees planted as part of urban re-forestation", icon: <Trees className="h-10 w-10 text-eco-green" /> },
     { id: 6, stat: "2,450", text: "kW solar capacity at Hexaware offices", icon: <Laptop className="h-10 w-10 text-eco-blue-dark" /> },
   ];
 
