@@ -228,8 +228,11 @@ const Dashboard = () => {
                 />
               </div>
 
-              {/* Floor Map */}
-              <FloorMap />
+              {/* Floor Map with current building and floor */}
+              <FloorMap 
+                currentBuilding={currentBuilding} 
+                currentFloor={currentFloor}
+              />
 
               {/* Notifications */}
               <DashboardCard 
@@ -529,7 +532,11 @@ const Dashboard = () => {
               />
             </div>
             
-            <FloorMap />
+            {/* Floor Map with current building and floor */}
+            <FloorMap 
+              currentBuilding={currentBuilding} 
+              currentFloor={currentFloor}
+            />
             
             {/* Notifications */}
             <DashboardCard 
