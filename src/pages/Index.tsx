@@ -554,7 +554,7 @@ const Index = () => {
               <span className="font-bold text-xl">HexSynergy</span>
             </div>
             <p className="text-muted-foreground">
-              Code for a Greener Future Hackathon Project
+              EcoFuelers : Code for a Greener Future
             </p>
             <p className="text-xs text-muted-foreground">
               &copy; 2025 HexSynergy by Hexaware. All rights reserved.
