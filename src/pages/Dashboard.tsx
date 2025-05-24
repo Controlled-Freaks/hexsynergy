@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import NavBar from "@/components/NavBar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,6 +19,8 @@ import { DashboardFilters } from "@/components/DashboardFilters";
 import { EmployeeCard } from "@/components/EmployeeCard";
 import { BuildingOverviewCard } from "@/components/BuildingOverviewCard";
 import { DepartmentComparisonCard } from "@/components/DepartmentComparisonCard";
+import { getEmployeeById } from "@/data/mockData";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const Dashboard = () => {
   const { user, isAdmin } = useAuth();
@@ -26,7 +29,11 @@ const Dashboard = () => {
   const [currentFloor, setCurrentFloor] = useState("All Floors");
   const [currentDepartment, setCurrentDepartment] = useState("Software Development");
   const [isAdminView, setIsAdminView] = useState(isAdmin || false);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(null);
+  const [showEmployeeDetails, setShowEmployeeDetails] = useState(false);
   
+  const selectedEmployee = selectedEmployeeId ? getEmployeeById(selectedEmployeeId) : null;
+
   const [notifications, setNotifications] = useState([
     {
       id: "n1",
@@ -113,6 +120,12 @@ const Dashboard = () => {
 
     return () => clearTimeout(timer);
   }, [darkMode, notifications]);
+
+  // Handle employee selection
+  const handleSelectEmployee = (employeeId: string) => {
+    setSelectedEmployeeId(employeeId);
+    setShowEmployeeDetails(true);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -232,6 +245,7 @@ const Dashboard = () => {
               <FloorMap 
                 currentBuilding={currentBuilding} 
                 currentFloor={currentFloor}
+                onSelectEmployee={handleSelectEmployee}
               />
 
               {/* Notifications */}
@@ -325,8 +339,8 @@ const Dashboard = () => {
                   description="Renewable vs non-renewable energy sources"
                   xAxisKey="source"
                   dataKeys={[
-                    { key: "value", color: "#4CAF50" },
-                    { key: "value", color: "#F44336" },
+                    { key: "value", color: "#4CAF50", name: "Renewable" },
+                    { key: "value", color: "#F44336", name: "Non-renewable" },
                   ]}
                 />
               </div>
@@ -536,6 +550,7 @@ const Dashboard = () => {
             <FloorMap 
               currentBuilding={currentBuilding} 
               currentFloor={currentFloor}
+              onSelectEmployee={handleSelectEmployee}
             />
             
             {/* Notifications */}
@@ -588,6 +603,119 @@ const Dashboard = () => {
           </div>
         )}
       </main>
+
+      {/* Employee Details Dialog */}
+      <Dialog open={showEmployeeDetails} onOpenChange={setShowEmployeeDetails}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Employee Details</DialogTitle>
+            <DialogDescription>
+              Detailed energy consumption information for {selectedEmployee?.name}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedEmployee ? (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="text-sm font-medium mb-1">Personal Information</h4>
+                  <div className="bg-muted/30 p-3 rounded-md space-y-1 text-sm">
+                    <p><span className="font-medium">Name:</span> {selectedEmployee.name}</p>
+                    <p><span className="font-medium">Department:</span> {selectedEmployee.department}</p>
+                    <p><span className="font-medium">Location:</span> {selectedEmployee.building}, {selectedEmployee.floor}</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="text-sm font-medium mb-1">Energy Settings</h4>
+                  <div className="bg-muted/30 p-3 rounded-md space-y-1 text-sm">
+                    <p>
+                      <span className="font-medium">Energy Saving:</span> 
+                      <span className={selectedEmployee.energySaving ? "text-green-500" : "text-amber-500"}>
+                        {selectedEmployee.energySaving ? " Enabled" : " Disabled"}
+                      </span>
+                    </p>
+                    <p>
+                      <span className="font-medium">Dark Mode:</span>
+                      <span className={selectedEmployee.darkMode ? "text-green-500" : "text-amber-500"}>
+                        {selectedEmployee.darkMode ? " Enabled" : " Disabled"}
+                      </span>
+                    </p>
+                    <p>
+                      <span className="font-medium">Seating Optimized:</span>
+                      <span className={selectedEmployee.seatingOptimized ? "text-green-500" : "text-amber-500"}>
+                        {selectedEmployee.seatingOptimized ? " Yes" : " No"}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="text-sm font-medium mb-1">Daily Device Usage</h4>
+                <div className="bg-muted/30 p-3 rounded-md">
+                  <SustainabilityChart
+                    type="bar"
+                    data={[
+                      { device: "Laptop", hours: selectedEmployee.deviceUsage.laptop },
+                      { device: "AC", hours: selectedEmployee.deviceUsage.ac },
+                      { device: "Lighting", hours: selectedEmployee.deviceUsage.lighting },
+                    ]}
+                    height={200}
+                    title=""
+                    description=""
+                    xAxisKey="device"
+                    dataKeys={[
+                      { key: "hours", color: "#2196F3", name: "Hours" }
+                    ]}
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="text-sm font-medium mb-1">Monthly Statistics (May 2025)</h4>
+                <div className="grid grid-cols-4 gap-2">
+                  <div className="bg-muted/30 p-2 rounded-md text-center">
+                    <div className="text-xs text-muted-foreground">Energy</div>
+                    <div className="font-semibold">
+                      {selectedEmployee.monthlyData["May 2025"]?.energyConsumption || 0} kWh
+                    </div>
+                  </div>
+                  
+                  <div className="bg-muted/30 p-2 rounded-md text-center">
+                    <div className="text-xs text-muted-foreground">Elevator Uses</div>
+                    <div className="font-semibold">
+                      {selectedEmployee.monthlyData["May 2025"]?.elevatorUses || 0}
+                    </div>
+                  </div>
+                  
+                  <div className="bg-muted/30 p-2 rounded-md text-center">
+                    <div className="text-xs text-muted-foreground">Stair Uses</div>
+                    <div className="font-semibold">
+                      {selectedEmployee.monthlyData["May 2025"]?.stairUses || 0}
+                    </div>
+                  </div>
+                  
+                  <div className="bg-muted/30 p-2 rounded-md text-center">
+                    <div className="text-xs text-muted-foreground">Awe Points</div>
+                    <div className="font-semibold">
+                      {selectedEmployee.monthlyData["May 2025"]?.awePointsEarned || 0}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-end">
+                <Button variant="outline" onClick={() => setShowEmployeeDetails(false)}>Close</Button>
+              </div>
+            </div>
+          ) : (
+            <div className="py-4 text-center text-muted-foreground">
+              Loading employee details...
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
