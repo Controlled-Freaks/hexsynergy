@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import NavBar from "@/components/NavBar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -212,9 +211,9 @@ const Dashboard = () => {
                   description="Your daily energy usage compared to targets and baseline"
                   xAxisKey="month"
                   dataKeys={[
-                    { key: "actual", color: "#4CAF50" },
-                    { key: "target", color: "#2196F3" },
-                    { key: "baseline", color: "#9E9E9E" },
+                    { key: "actual", color: "#4CAF50", name: "Actual" },
+                    { key: "target", color: "#2196F3", name: "Target" },
+                    { key: "baseline", color: "#9E9E9E", name: "Baseline" },
                   ]}
                   className="lg:col-span-2"
                 />
@@ -307,9 +306,9 @@ const Dashboard = () => {
                   description="Energy consumption by device type"
                   xAxisKey="day"
                   dataKeys={[
-                    { key: "laptop", color: "#2196F3" },
-                    { key: "lighting", color: "#FFC107" },
-                    { key: "ac", color: "#4CAF50" },
+                    { key: "laptop", color: "#2196F3", name: "Laptop" },
+                    { key: "lighting", color: "#FFC107", name: "Lighting" },
+                    { key: "ac", color: "#4CAF50", name: "AC" },
                   ]}
                 />
 
@@ -426,9 +425,9 @@ const Dashboard = () => {
                   description="Your weekly emissions compared to office average and targets"
                   xAxisKey="week"
                   dataKeys={[
-                    { key: "emissions", color: "#4CAF50" },
-                    { key: "average", color: "#9E9E9E" },
-                    { key: "target", color: "#2196F3" },
+                    { key: "emissions", color: "#4CAF50", name: "Your Emissions" },
+                    { key: "average", color: "#9E9E9E", name: "Office Average" },
+                    { key: "target", color: "#2196F3", name: "Target" },
                   ]}
                 />
               </div>

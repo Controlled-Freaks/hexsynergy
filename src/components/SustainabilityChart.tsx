@@ -20,8 +20,9 @@ interface SustainabilityChartProps {
   title: string;
   description?: string;
   xAxisKey?: string;
-  dataKeys: { key: string; color: string }[];
+  dataKeys: { key: string; color: string; name?: string }[];
   className?: string;
+  height?: number;
 }
 
 export function SustainabilityChart({
@@ -32,12 +33,13 @@ export function SustainabilityChart({
   xAxisKey,
   dataKeys,
   className,
+  height = 300,
 }: SustainabilityChartProps) {
   const renderChart = () => {
     switch (type) {
       case "bar":
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={height}>
             <BarChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey={xAxisKey} />
@@ -56,6 +58,7 @@ export function SustainabilityChart({
                   key={index} 
                   dataKey={item.key} 
                   fill={item.color} 
+                  name={item.name || item.key}
                   radius={[4, 4, 0, 0]}
                   animationDuration={1500}
                 />
@@ -65,7 +68,7 @@ export function SustainabilityChart({
         );
       case "line":
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={height}>
             <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey={xAxisKey} />
@@ -85,6 +88,7 @@ export function SustainabilityChart({
                   type="monotone"
                   dataKey={item.key}
                   stroke={item.color}
+                  name={item.name || item.key}
                   activeDot={{ r: 8 }}
                   animationDuration={1500}
                 />
@@ -94,7 +98,7 @@ export function SustainabilityChart({
         );
       case "pie":
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={height}>
             <PieChart>
               <Pie
                 data={data}
